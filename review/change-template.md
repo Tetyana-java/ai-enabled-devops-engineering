@@ -18,5 +18,6 @@ Any **No** blocks submission.
 | 6 | Are dependencies justified? | | |
 | 7 | Are protected paths unchanged or approved? | | |
 | 8 | Are relevant documents updated? | | |
+| 9 | Were decisions not in the spec answered by a human? | | |
 
 Result: <Ready to submit | Blocked: list the No answers>

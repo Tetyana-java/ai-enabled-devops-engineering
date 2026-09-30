@@ -1,66 +1,52 @@
 # Skill run: pr-reviewer
 
 - Skill: [skills/pr-reviewer/SKILL.md](../skills/pr-reviewer/SKILL.md)
-- Date: 2026-09-28
+- Date: 2026-09-30
 - Agent: Claude Code (Claude Opus 5.5). This is a self-review. A human still reviews and merges.
+- This run replaces the 2026-09-28 run, because the checklist now has nine questions.
 
 ## Input
 
 ```text
-Change: chore(foundation): add AI-ready project foundation
-Spec: none (docs/config only). Source: the human's "AI-Ready Project Foundation" assignment brief.
+Change: docs(human-decisions): require human answers for decisions not in the spec
+Spec: none (docs/config only). Source: human request in chat, 2026-09-30.
+Branch: docs/human-decisions (based on feat/health-endpoint 6847839)
 ```
 
-`git status --porcelain` (initial repository, everything staged):
+`git status --porcelain`:
 
 ```text
-A  .gitignore
-A  AGENTS.md
-A  CLAUDE.md
-A  CONTRIBUTING.md
-A  README.md
-A  constitution.md
-A  docs/decisions.md
-A  docs/standards.md
-A  plans/TEMPLATE.md
-A  review/change-template.md
-A  scripts/validate.sh
-A  skill-runs/spec-generator.md
-A  skill-runs/test-plan-generator.md
-A  skills/pr-reviewer/SKILL.md
-A  skills/spec-generator/SKILL.md
-A  skills/test-plan-generator/SKILL.md
-A  specs/TEMPLATE.md
-A  specs/sample-health-endpoint.md
-A  src/.gitkeep
-A  tasks/TEMPLATE.md
-A  tests/.gitkeep
+ M docs/decisions.md
+ M plans/TEMPLATE.md
+ M review/change-template.md
+ M skills/pr-reviewer/SKILL.md
 ```
 
-`git diff --cached --stat`: `21 files changed, 962 insertions(+)`. This run adds a 22nd file, `skill-runs/pr-reviewer.md`.
+`git diff --stat`: `4 files changed, 18 insertions(+), 3 deletions(-)`. This run adds a 5th file, `skill-runs/pr-reviewer.md`.
 
 ## Output
 
 # Change review
 
-Change: chore(foundation): add AI-ready project foundation
+Change: docs(human-decisions): require human answers for decisions not in the spec
 Spec: none (docs/config only)
 Reviewer: agent + pr-reviewer skill
 
 | # | Question | Answer | Evidence |
 |---|----------|--------|----------|
-| 1 | Is an approved specification linked? | Not applicable | No feature code. `find src tests -type f` shows only `src/.gitkeep` and `tests/.gitkeep`. |
-| 2 | Is the change within scope? | Yes | Every file is a deliverable in the assignment brief, or supports one: `CLAUDE.md` (pointer, D-3), `scripts/validate.sh` (D-2), `docs/decisions.md` (constitution principle 5), `.gitignore` (secret handling). `git diff --cached --name-only` shows only `.md`, `.sh`, `.gitkeep`, and `.gitignore` files. |
-| 3 | Are acceptance criteria covered by tests? | Not applicable | No spec, so no acceptance criteria. The validator was checked against failing cases in a scratch copy: code without approval, Approved without a name, a secret, and a failing `tests/run.sh` each produced `VALIDATION FAILED`. |
-| 4 | Did validation pass? | Yes | `./scripts/validate.sh` exited 0 with last line `VALIDATION PASSED` (full output below). |
-| 5 | Are secrets absent? | Yes | The secret-scan section of `./scripts/validate.sh` reported no `FAIL`. No `.env` files exist (`ls .env*`: no matches). |
-| 6 | Are dependencies justified? | Yes | No dependencies were added. The validator uses only Bash and coreutils (docs/decisions.md D-2). |
-| 7 | Are protected paths unchanged or approved? | Yes | This change creates the protected paths listed in AGENTS.md. The human's assignment brief requested each one by name. |
-| 8 | Are relevant documents updated? | Yes | AGENTS.md links every governance document. The validator's "AGENTS.md links all governance documents" check passed. README.md "Status" matches D-1. |
+| 1 | Is an approved specification linked? | Not applicable | Docs-only. `git diff --stat` touches no file in `src/` or `tests/`. |
+| 2 | Is the change within scope? | Yes | The request asks for the rule in the plan template, review, and pr-reviewer. The changed files are exactly those, plus D-7 in `docs/decisions.md` and this recorded run. |
+| 3 | Are acceptance criteria covered by tests? | Not applicable | No spec, so no acceptance criteria. `tests/run.sh` still runs and passes inside validation. |
+| 4 | Did validation pass? | Yes | `./scripts/validate.sh` → exit 0, last line `VALIDATION PASSED` (output below) |
+| 5 | Are secrets absent? | Yes | The "Secret scan" section of validation reported no `FAIL` |
+| 6 | Are dependencies justified? | Not applicable | No dependencies were added. `pom.xml` is not in `git diff --stat`. |
+| 7 | Are protected paths unchanged or approved? | Yes | `plans/TEMPLATE.md`, `review/change-template.md`, and `skills/pr-reviewer/SKILL.md` were approved by name in a human message ("approve plans/TEMPLATE.md, review/change-template.md, skills/pr-reviewer/SKILL.md"). `AGENTS.md` is unchanged, because it was not approved. |
+| 8 | Are relevant documents updated? | Yes | The rule is recorded as D-7. The skill's steps, stop conditions, and quality checks now say nine questions. validate.sh "Review checklist questions" passed. |
+| 9 | Were decisions not in the spec answered by a human? | Not applicable | No spec and no plan. The human chose where the rule goes: the 9th question, no backfill of `plans/health-endpoint.md`, and stacking on `feat/health-endpoint`. |
 
 Result: Ready to submit
 
-Validation output (run after this file was written):
+Validation output:
 
 ```text
 $ ./scripts/validate.sh; echo "exit=$?"
@@ -74,16 +60,17 @@ $ ./scripts/validate.sh; echo "exit=$?"
 ==> Secret scan
 ==> Markdown files are short (max 200 lines)
 ==> Tests
-INFO  tests/run.sh not present; no tests to run
 VALIDATION PASSED
 exit=0
 ```
+
+(Maven test logs from `tests/run.sh` are left out.)
 
 Quality checks:
 
 | Check | Answer |
 |-------|--------|
-| Are all eight questions answered? | Yes |
+| Are all nine questions answered? | Yes |
 | Is every answer exactly Yes, No, or Not applicable? | Yes |
 | Does every answer have evidence (a link, command output, or file reference)? | Yes |
 | Is the Result `Blocked` whenever any answer is No? | Yes (there are no No answers) |

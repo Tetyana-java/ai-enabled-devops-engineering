@@ -23,7 +23,7 @@ Every answer must be backed by evidence. The skill never changes the checklist.
 
 ## Steps
 
-1. Copy the table from `review/change-template.md` without changing its eight questions.
+1. Copy the table from `review/change-template.md` without changing its nine questions.
 2. List the changed files. Compare them with the protected paths in [AGENTS.md](../../AGENTS.md).
 3. Q1: open the spec. Answer Yes only if it says `Status: Approved` and has an approver name and date. If the change does not touch `src/` or `tests/`, answer Not applicable.
 4. Q2: compare the changed files with the plan's "Files to change" list, or with the request for a docs/config change.
@@ -33,13 +33,16 @@ Every answer must be backed by evidence. The skill never changes the checklist.
 8. Q6: check that every new dependency is named in the spec and in `docs/decisions.md`.
 9. Q7: list the protected paths that were touched, and the approval for each.
 10. Q8: check that the docs describing the changed behavior were updated in the same change.
-11. Set Result: `Ready to submit` if there is no No, otherwise `Blocked` with the No answers listed.
+11. Q9: read the plan's "Decisions not in the spec" table. Answer Yes only if every row names the human who answered it and has a matching `D-n` in `docs/decisions.md`.
+    Also answer No if the change makes a choice that is in neither the spec nor that table. If there is no spec and no plan, answer Not applicable.
+12. Set Result: `Ready to submit` if there is no No, otherwise `Blocked` with the No answers listed.
 
 ## Stop conditions
 
 - The changed-file list is missing and cannot be produced. Stop and ask for it.
 - You cannot find evidence for an answer. Answer No and say what is missing. Never guess Yes.
 - A secret is found. Answer Q5 No, name only the file, and stop for a human.
+- A decision is not in the spec and has no human answer. Answer Q9 No, list the decision, and ask a human. Never fill in the answer yourself.
 
 ## Output format
 
@@ -47,7 +50,7 @@ The completed table from `review/change-template.md`, including the header lines
 
 ## Quality checks
 
-- Are all eight questions answered? Yes/No
+- Are all nine questions answered? Yes/No
 - Is every answer exactly Yes, No, or Not applicable? Yes/No
 - Does every answer have evidence (a link, command output, or file reference)? Yes/No
 - Is the Result `Blocked` whenever any answer is No? Yes/No

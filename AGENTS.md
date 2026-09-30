@@ -75,6 +75,7 @@ Each rule has a Yes/No answer. For every rule, "No" means the change is blocked.
 - **R7.** If requirements are unclear, stop and ask. Do not guess. Was every unclear point recorded as an Open Question and sent to a human?
 - **R8.** Implement only the approved scope. Does every changed file appear in the plan for the linked approved spec?
 - **R9.** Do not choose technology. Is every language, framework, dependency, port, and path named in the approved spec?
+- **R10.** Do not make decisions the spec does not cover. Did a named human answer every such decision, such as an exact version, name, layout, or tool setting, with each one listed under "Decisions not in the spec" in the plan and recorded in [docs/decisions.md](docs/decisions.md)?
 
 ## Handling a feature request
 
@@ -110,6 +111,7 @@ Approval is valid only in one of two forms: a human message that names the path,
 - A request needs code or tests and no approved spec exists.
 - A requirement is missing, ambiguous, or conflicting.
 - A change needs a protected path, a new dependency, or a technology the approved spec does not name.
+- A plan or implementation needs a decision the approved spec does not cover.
 - Validation fails and the only fix would weaken a test, check, or security setting.
 - A secret is found or needed.
 - A spec is ready for approval. This always needs a human.

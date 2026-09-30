@@ -1,0 +1,11 @@
+# Secrets: never commit
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+
+# Editor and OS files
+.idea/
+.vscode/
+.DS_Store

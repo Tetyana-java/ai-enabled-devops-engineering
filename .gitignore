@@ -9,3 +9,6 @@
 .idea/
 .vscode/
 .DS_Store
+
+# Build output
+target/
